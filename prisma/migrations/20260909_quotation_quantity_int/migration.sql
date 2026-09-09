@@ -1,0 +1,1 @@
+ALTER TABLE "quotation_items" ALTER COLUMN "quantity" TYPE INTEGER USING ("quantity")::integer;

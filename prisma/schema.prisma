@@ -1,0 +1,276 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum QuotationStatus {
+  DRAFT
+  GENERATED
+  SENT
+  ACCEPTED
+  REJECTED
+  EXPIRED
+}
+
+enum DiscountType {
+  AMOUNT
+  PERCENT
+}
+
+model User {
+  id           String     @id @default(cuid())
+  name         String
+  email        String     @unique
+  passwordHash String
+  status       UserStatus @default(ACTIVE)
+  lastLoginAt  DateTime?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  quotations Quotation[] @relation("QuotationCreatedBy")
+
+  @@map("users")
+}
+
+model Category {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  status    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  products   Product[]
+  sizes      Size[]
+  rangeTypes RangeType[]
+
+  @@map("categories")
+}
+
+model Size {
+  id         String    @id @default(cuid())
+  name       String
+  categoryId String?
+  category   Category? @relation(fields: [categoryId], references: [id])
+  status     Boolean   @default(true)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  rates          ProductRate[]
+  quotationItems QuotationItem[]
+
+  @@unique([categoryId, name])
+  @@index([categoryId])
+  @@map("sizes")
+}
+
+model RangeType {
+  id         String    @id @default(cuid())
+  name       String
+  categoryId String?
+  category   Category? @relation(fields: [categoryId], references: [id])
+  status     Boolean   @default(true)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  rates          ProductRate[]
+  quotationItems QuotationItem[]
+
+  @@unique([categoryId, name])
+  @@index([categoryId])
+  @@map("range_types")
+}
+
+model Uom {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  status    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  rates             ProductRate[]
+  quotationItems    QuotationItem[]
+
+  @@map("uoms")
+}
+
+model Product {
+  id                 String     @id @default(cuid())
+  name               String
+  categoryId         String
+  category           Category   @relation(fields: [categoryId], references: [id])
+  status             Boolean    @default(true)
+  createdAt          DateTime   @default(now())
+  updatedAt          DateTime   @updatedAt
+
+  rates          ProductRate[]
+  quotationItems QuotationItem[]
+
+  @@index([categoryId])
+  @@index([name])
+  @@map("products")
+}
+
+model ProductRate {
+  id            String    @id @default(cuid())
+  productId     String
+  product       Product   @relation(fields: [productId], references: [id])
+  sizeId        String
+  size          Size      @relation(fields: [sizeId], references: [id])
+  rangeTypeId   String
+  rangeType     RangeType @relation(fields: [rangeTypeId], references: [id])
+  uomId         String
+  uom           Uom       @relation(fields: [uomId], references: [id])
+  rate          Decimal   @db.Decimal(14, 2)
+  effectiveFrom DateTime?
+  status        Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  quotationItems QuotationItem[]
+
+  @@unique([productId, sizeId, rangeTypeId, uomId], name: "productRateCombo")
+  @@index([productId])
+  @@index([status])
+  @@map("product_rates")
+}
+
+model Customer {
+  id          String   @id @default(cuid())
+  companyName String
+  city        String?
+  country     String?
+  status      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  quotations Quotation[]
+
+  @@index([companyName])
+  @@map("customers")
+}
+
+model Quotation {
+  id              String          @id @default(cuid())
+  quotationNumber String          @unique
+  customerId      String
+  customer        Customer        @relation(fields: [customerId], references: [id])
+  quotationDate   DateTime
+  expirationDate  DateTime
+  status          QuotationStatus @default(DRAFT)
+
+  subtotal       Decimal       @db.Decimal(14, 2)
+  discountType   DiscountType?
+  discountValue  Decimal?      @db.Decimal(14, 2)
+  discountAmount Decimal       @default(0) @db.Decimal(14, 2)
+  taxableAmount  Decimal       @db.Decimal(14, 2)
+
+  gstEnabled Boolean @default(true)
+  gstPercent Decimal @default(0) @db.Decimal(5, 2)
+  gstAmount  Decimal @default(0) @db.Decimal(14, 2)
+
+  additionalTaxEnabled Boolean  @default(false)
+  additionalTaxName    String?
+  additionalTaxPercent Decimal? @db.Decimal(5, 2)
+  additionalTaxAmount  Decimal  @default(0) @db.Decimal(14, 2)
+
+  grandTotal    Decimal @db.Decimal(14, 2)
+  amountInWords String
+  notes         String?
+
+  createdById String
+  createdBy   User   @relation("QuotationCreatedBy", fields: [createdById], references: [id])
+
+  duplicatedFromId String?
+  duplicatedFrom   Quotation?  @relation("QuotationDuplicate", fields: [duplicatedFromId], references: [id], onDelete: SetNull)
+  duplicates       Quotation[] @relation("QuotationDuplicate")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  items     QuotationItem[]
+
+  @@index([customerId])
+  @@index([status])
+  @@index([quotationDate])
+  @@index([expirationDate])
+  @@map("quotations")
+}
+
+model QuotationItem {
+  id          String    @id @default(cuid())
+  quotationId String
+  quotation   Quotation @relation(fields: [quotationId], references: [id], onDelete: Cascade)
+  sortOrder   Int
+
+  productId     String?
+  product       Product?     @relation(fields: [productId], references: [id], onDelete: SetNull)
+  sizeId        String?
+  size          Size?        @relation(fields: [sizeId], references: [id], onDelete: SetNull)
+  rangeTypeId   String?
+  rangeType     RangeType?   @relation(fields: [rangeTypeId], references: [id], onDelete: SetNull)
+  uomId         String?
+  uom           Uom?         @relation(fields: [uomId], references: [id], onDelete: SetNull)
+  productRateId String?
+  productRate   ProductRate? @relation(fields: [productRateId], references: [id], onDelete: SetNull)
+
+  productNameSnapshot String
+  descriptionSnapshot String
+  sizeSnapshot        String?
+  rangeTypeSnapshot   String?
+  uomSnapshot         String
+
+  quantity            Int
+  matchedRateSnapshot Decimal? @db.Decimal(14, 2)
+  finalRate           Decimal  @db.Decimal(14, 2)
+  isOverridden         Boolean @default(false)
+  lineTotal            Decimal @db.Decimal(14, 2)
+
+  @@index([quotationId])
+  @@map("quotation_items")
+}
+
+model CompanySettings {
+  id        String   @id @default("singleton")
+  name      String   @default("Master Tech International")
+  logoUrl   String?
+  address   String?  @default("503, 5th Floor, Rimjhim Shopping Centre, Gulshan-e-Iqbal, Block 6, Karachi, Pakistan")
+  phone     String?
+  mobile    String?  @default("0300-8221115")
+  email     String?
+  website   String?  @default("www.mti.com")
+  ntn       String?  @default("3963409-4")
+  strn      String?  @default("1700396340912")
+  isoCerts  String?  @default("ISO 9001:2015, 14001:2015, 45001:2018")
+  updatedAt DateTime @updatedAt
+
+  @@map("company_settings")
+}
+
+model QuotationSettings {
+  id           String   @id @default("singleton")
+  prefix       String   @default("MTI")
+  nextSequence Int      @default(1)
+  currency     String   @default("PKR")
+  updatedAt    DateTime @updatedAt
+
+  @@map("quotation_settings")
+}
+
+model TaxSettings {
+  id                          String   @id @default("singleton")
+  defaultGstPercent           Decimal  @default(18) @db.Decimal(5, 2)
+  defaultAdditionalTaxEnabled Boolean  @default(false)
+  defaultAdditionalTaxName    String?  @default("Additional Tax")
+  defaultAdditionalTaxPercent Decimal? @db.Decimal(5, 2)
+  updatedAt                   DateTime @updatedAt
+
+  @@map("tax_settings")
+}
