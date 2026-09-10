@@ -9,13 +9,55 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Eye, EyeOff } from "lucide-react";
 import { changeOwnPasswordSchema } from "@/lib/validations/settings.schema";
 import { changeOwnPassword } from "@/actions/users.actions";
 
 type FormValues = z.infer<typeof changeOwnPasswordSchema>;
 
+function PasswordField({
+  id,
+  label,
+  register,
+  error,
+  show,
+  onToggle,
+}: {
+  id: string;
+  label: string;
+  register: ReturnType<typeof useForm<FormValues>>["register"];
+  error?: string;
+  show: boolean;
+  onToggle: () => void;
+}) {
+  return (
+    <div className="space-y-2">
+      <Label htmlFor={id}>{label} *</Label>
+      <div className="relative">
+        <Input
+          id={id}
+          type={show ? "text" : "password"}
+          {...register(id as keyof FormValues)}
+          className="pr-10"
+        />
+        <button
+          type="button"
+          onClick={onToggle}
+          className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+        >
+          {show ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+        </button>
+      </div>
+      {error && <p className="text-sm text-destructive">{error}</p>}
+    </div>
+  );
+}
+
 export function ChangePasswordForm() {
   const [serverError, setServerError] = useState<string | null>(null);
+  const [showCurrent, setShowCurrent] = useState(false);
+  const [showNew, setShowNew] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
   const {
     register,
     handleSubmit,
@@ -45,25 +87,30 @@ export function ChangePasswordForm() {
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="currentPassword">Current Password *</Label>
-            <Input id="currentPassword" type="password" {...register("currentPassword")} />
-            {errors.currentPassword && (
-              <p className="text-sm text-destructive">{errors.currentPassword.message}</p>
-            )}
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="newPassword">New Password *</Label>
-            <Input id="newPassword" type="password" {...register("newPassword")} />
-            {errors.newPassword && <p className="text-sm text-destructive">{errors.newPassword.message}</p>}
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="confirmPassword">Confirm New Password *</Label>
-            <Input id="confirmPassword" type="password" {...register("confirmPassword")} />
-            {errors.confirmPassword && (
-              <p className="text-sm text-destructive">{errors.confirmPassword.message}</p>
-            )}
-          </div>
+          <PasswordField
+            id="currentPassword"
+            label="Current Password"
+            register={register}
+            error={errors.currentPassword?.message}
+            show={showCurrent}
+            onToggle={() => setShowCurrent(!showCurrent)}
+          />
+          <PasswordField
+            id="newPassword"
+            label="New Password"
+            register={register}
+            error={errors.newPassword?.message}
+            show={showNew}
+            onToggle={() => setShowNew(!showNew)}
+          />
+          <PasswordField
+            id="confirmPassword"
+            label="Confirm New Password"
+            register={register}
+            error={errors.confirmPassword?.message}
+            show={showConfirm}
+            onToggle={() => setShowConfirm(!showConfirm)}
+          />
 
           {serverError && <p className="text-sm text-destructive">{serverError}</p>}
 
