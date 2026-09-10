@@ -14,6 +14,7 @@ import { deleteQuotation } from "@/actions/quotations.actions";
 import { StatusChanger } from "./status-changer";
 import { DuplicateQuotationButton } from "./duplicate-quotation-button";
 import { QuotationStatusBadge } from "@/components/shared/quotation-status-badge";
+import { BackLink } from "@/components/shared/back-link";
 
 export default async function QuotationViewPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -38,6 +39,7 @@ export default async function QuotationViewPage({ params }: { params: Promise<{ 
 
   return (
     <div className="space-y-6">
+      <BackLink href="/quotations" label="Back to Quotations" />
       <PageHeader
         title={quotation.quotationNumber}
         description={quotation.customer.companyName}

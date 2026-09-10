@@ -12,6 +12,7 @@ import { EmptyState } from "@/components/shared/empty-state";
 import { formatMoney } from "@/lib/money";
 import { formatDate } from "@/lib/format";
 import { deleteProduct } from "@/actions/products.actions";
+import { BackLink } from "@/components/shared/back-link";
 
 export default async function ProductViewPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -44,12 +45,13 @@ export default async function ProductViewPage({ params }: { params: Promise<{ id
 
   return (
     <div className="space-y-6">
+      <BackLink href="/products" label="Back to Products" />
       <PageHeader
         title={product.name}
         description={product.category.name}
         actions={
           <>
-            <Button variant="outline" render={<Link href={`/products/${id}`} />}>
+            <Button variant="outline" render={<Link href={`/products/${id}/edit`} />}>
               <Pencil /> Edit
             </Button>
             <ConfirmDialog

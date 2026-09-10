@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { PageHeader } from "@/components/shared/page-header";
+import { BackLink } from "@/components/shared/back-link";
 import { ProductForm } from "../product-form";
 
 export default async function NewProductPage() {
@@ -10,6 +11,7 @@ export default async function NewProductPage() {
 
   return (
     <div className="space-y-6">
+      <BackLink href="/products" label="Back to Products" />
       <PageHeader title="Add Product" description="Create a new product in the catalog." />
       <ProductForm categories={categories} uoms={uoms} />
     </div>

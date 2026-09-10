@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { PageHeader } from "@/components/shared/page-header";
+import { BackLink } from "@/components/shared/back-link";
 import { isEditable } from "@/lib/quotation-expiry";
 import { QuotationForm, type QuotationBuilderValues } from "../../quotation-form";
 
@@ -21,6 +22,7 @@ export default async function EditQuotationPage({ params }: { params: Promise<{ 
   if (!isEditable(quotation)) {
     return (
       <div className="space-y-6">
+        <BackLink href="/quotations" label="Back to Quotations" />
         <PageHeader title="Edit Quotation" description={quotation.quotationNumber} />
         <p className="text-sm text-muted-foreground">
           This quotation can no longer be edited because it has been {quotation.status.toLowerCase()}.
@@ -59,6 +61,7 @@ export default async function EditQuotationPage({ params }: { params: Promise<{ 
 
   return (
     <div className="space-y-6">
+      <BackLink href="/quotations" label="Back to Quotations" />
       <PageHeader title="Edit Quotation" description={quotation.quotationNumber} />
       <QuotationForm
         quotationId={id}

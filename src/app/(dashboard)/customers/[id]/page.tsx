@@ -13,6 +13,7 @@ import { QuotationStatusBadge } from "@/components/shared/quotation-status-badge
 import { formatDate } from "@/lib/format";
 import { formatMoney } from "@/lib/money";
 import { deleteCustomer } from "@/actions/customers.actions";
+import { BackLink } from "@/components/shared/back-link";
 
 export default async function CustomerViewPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -40,6 +41,7 @@ export default async function CustomerViewPage({ params }: { params: Promise<{ i
 
   return (
     <div className="space-y-6">
+      <BackLink href="/customers" label="Back to Customers" />
       <PageHeader
         title={customer.companyName}
         actions={

@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { PageHeader } from "@/components/shared/page-header";
+import { BackLink } from "@/components/shared/back-link";
 import { QuotationForm } from "../quotation-form";
 
 export default async function NewQuotationPage({
@@ -21,6 +22,7 @@ export default async function NewQuotationPage({
 
   return (
     <div className="space-y-6">
+      <BackLink href="/quotations" label="Back to Quotations" />
       <PageHeader title="New Quotation" description="Build a new professional quotation." />
       <QuotationForm
         customers={customers.map((c) => ({ id: c.id, name: c.companyName }))}

@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { PageHeader } from "@/components/shared/page-header";
+import { BackLink } from "@/components/shared/back-link";
 import { ProductForm } from "../../product-form";
 
 export default async function EditProductPage({ params }: { params: Promise<{ id: string }> }) {
@@ -16,6 +17,7 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
 
   return (
     <div className="space-y-6">
+      <BackLink href="/products" label="Back to Products" />
       <PageHeader title="Edit Product" description={product.name} />
       <ProductForm
         product={product}
