@@ -1,6 +1,4 @@
 {
-  "functions": {
-    "src/**/*.ts": { "region": "syd1", "maxDuration": 60 },
-    "src/**/*.tsx": { "region": "syd1", "maxDuration": 60 }
-  }
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "regions": ["syd1"]
 }
