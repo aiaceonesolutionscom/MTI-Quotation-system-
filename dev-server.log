@@ -1,0 +1,57 @@
+
+> mti-quotation-system@0.1.0 start
+> next start -p 3001
+
+▲ Next.js 16.3.4
+- Local:         http://localhost:3001
+- Network:       http://100.67.218.2:3001
+✓ Ready in 769ms
+✓ Running next.config.ts took 278ms
+[mti.server] loginAction: NEXT_REDIRECT
+Error: NEXT_REDIRECT
+    at i (D:\Office work\Master tech international management system\.next\server\chunks\ssr\[root-of-the-server]__1go4up2._.js:1:4247)
+    at j (D:\Office work\Master tech international management system\.next\server\chunks\ssr\[root-of-the-server]__1go4up2._.js:1:4425)
+    at fJ (D:\Office work\Master tech international management system\.next\server\chunks\ssr\_17-c5ig._.js:404:61387)
+    at async k (D:\Office work\Master tech international management system\.next\server\chunks\ssr\[root-of-the-server]__1go4up2._.js:1:10704)
+    at async rq (D:\Office work\Master tech international management system\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.prod.js:104:2331)
+    at async D:\Office work\Master tech international management system\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.prod.js:104:678
+    at async rH (D:\Office work\Master tech international management system\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.prod.js:102:13351)
+    at async sw (D:\Office work\Master tech international management system\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.prod.js:139:1098)
+    at async l (D:\Office work\Master tech international management system\.next\server\chunks\ssr\node_modules_next_dist_1n3w9lb._.js:1:10914)
+    at async oO.handleResponse (D:\Office work\Master tech international management system\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.prod.js:182:43820)
+[mti.server] loginAction: NEXT_REDIRECT
+Error: NEXT_REDIRECT
+    at i (D:\Office work\Master tech international management system\.next\server\chunks\ssr\[root-of-the-server]__1go4up2._.js:1:4247)
+    at j (D:\Office work\Master tech international management system\.next\server\chunks\ssr\[root-of-the-server]__1go4up2._.js:1:4425)
+    at fJ (D:\Office work\Master tech international management system\.next\server\chunks\ssr\_17-c5ig._.js:404:61387)
+    at async k (D:\Office work\Master tech international management system\.next\server\chunks\ssr\[root-of-the-server]__1go4up2._.js:1:10704)
+    at async rq (D:\Office work\Master tech international management system\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.prod.js:104:2331)
+    at async D:\Office work\Master tech international management system\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.prod.js:104:678
+    at async rH (D:\Office work\Master tech international management system\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.prod.js:102:13351)
+    at async sw (D:\Office work\Master tech international management system\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.prod.js:139:1098)
+    at async l (D:\Office work\Master tech international management system\.next\server\chunks\ssr\node_modules_next_dist_1n3w9lb._.js:1:10914)
+    at async oO.handleResponse (D:\Office work\Master tech international management system\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.prod.js:182:43820)
+[mti.server] loginAction: NEXT_REDIRECT
+Error: NEXT_REDIRECT
+    at i (D:\Office work\Master tech international management system\.next\server\chunks\ssr\[root-of-the-server]__1go4up2._.js:1:4247)
+    at j (D:\Office work\Master tech international management system\.next\server\chunks\ssr\[root-of-the-server]__1go4up2._.js:1:4425)
+    at fJ (D:\Office work\Master tech international management system\.next\server\chunks\ssr\_17-c5ig._.js:404:61387)
+    at async k (D:\Office work\Master tech international management system\.next\server\chunks\ssr\[root-of-the-server]__1go4up2._.js:1:10704)
+    at async rq (D:\Office work\Master tech international management system\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.prod.js:104:2331)
+    at async D:\Office work\Master tech international management system\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.prod.js:104:678
+    at async rH (D:\Office work\Master tech international management system\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.prod.js:102:13351)
+    at async sw (D:\Office work\Master tech international management system\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.prod.js:139:1098)
+    at async l (D:\Office work\Master tech international management system\.next\server\chunks\ssr\node_modules_next_dist_1n3w9lb._.js:1:10914)
+    at async oO.handleResponse (D:\Office work\Master tech international management system\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.prod.js:182:43820)
+[mti.server] loginAction: NEXT_REDIRECT
+Error: NEXT_REDIRECT
+    at i (D:\Office work\Master tech international management system\.next\server\chunks\ssr\[root-of-the-server]__1go4up2._.js:1:4247)
+    at j (D:\Office work\Master tech international management system\.next\server\chunks\ssr\[root-of-the-server]__1go4up2._.js:1:4425)
+    at fJ (D:\Office work\Master tech international management system\.next\server\chunks\ssr\_17-c5ig._.js:404:61387)
+    at async k (D:\Office work\Master tech international management system\.next\server\chunks\ssr\[root-of-the-server]__1go4up2._.js:1:10704)
+    at async rq (D:\Office work\Master tech international management system\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.prod.js:104:2331)
+    at async D:\Office work\Master tech international management system\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.prod.js:104:678
+    at async rH (D:\Office work\Master tech international management system\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.prod.js:102:13351)
+    at async sw (D:\Office work\Master tech international management system\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.prod.js:139:1098)
+    at async l (D:\Office work\Master tech international management system\.next\server\chunks\ssr\node_modules_next_dist_1n3w9lb._.js:1:10914)
+    at async oO.handleResponse (D:\Office work\Master tech international management system\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.prod.js:182:43820)

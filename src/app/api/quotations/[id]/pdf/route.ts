@@ -3,6 +3,9 @@ import { requireSession, AuthorizationError } from "@/lib/auth-guard";
 import { generateQuotationPdf } from "@/pdf/generate-quotation-pdf";
 import { logError } from "@/lib/server-log";
 
+export const runtime = "nodejs";
+export const maxDuration = 60;
+
 export async function GET(_req: Request, ctx: { params: Promise<{ id: string }> }) {
   try {
     await requireSession();

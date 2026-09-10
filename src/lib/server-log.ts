@@ -23,6 +23,7 @@ export function logError(context: string, err: unknown) {
   const line = `[mti.server] ${context}: ${message}${stack ? "\n" + stack : ""}`;
   const timestamped = `[${new Date().toISOString()}] ${line}`;
   console.error(line);
+  if (process.env.VERCEL === "1") return;
   try {
     ensureLogFile();
     appendFileSync(LOG_FILE, timestamped + "\n");
