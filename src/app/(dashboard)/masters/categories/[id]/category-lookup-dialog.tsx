@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
@@ -49,6 +50,7 @@ export function CategoryLookupDialog({
 }) {
   const [open, setOpen] = useState(false);
   const isEdit = !!item;
+  const router = useRouter();
 
   const {
     register,
@@ -71,6 +73,7 @@ export function CategoryLookupDialog({
     }
     toast.success(isEdit ? `${entityLabel} updated.` : `${entityLabel} added.`);
     setOpen(false);
+    router.refresh();
     if (!isEdit) reset();
   };
 

@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { uomSchema } from "@/lib/validations/lookup.schema";
+import { logError } from "@/lib/server-log";
 
 type ActionResult = { error?: string };
 
@@ -12,7 +13,8 @@ export async function createUom(input: unknown): Promise<ActionResult> {
 
   try {
     await prisma.uom.create({ data: parsed.data });
-  } catch {
+  } catch (error) {
+    logError("createUom", error);
     return { error: "A UOM with this name already exists." };
   }
 
@@ -26,7 +28,8 @@ export async function updateUom(id: string, input: unknown): Promise<ActionResul
 
   try {
     await prisma.uom.update({ where: { id }, data: parsed.data });
-  } catch {
+  } catch (error) {
+    logError("updateUom", error);
     return { error: "A UOM with this name already exists." };
   }
 

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import { Pencil, FileDown, Printer, Copy, Trash2 } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -32,16 +32,12 @@ export default async function QuotationViewPage({ params }: { params: Promise<{ 
 
   async function handleDuplicate() {
     "use server";
-    const result = await duplicateQuotation(id);
-    if (result.id) redirect(`/quotations/${result.id}`);
-    return result;
+    return duplicateQuotation(id);
   }
 
   async function handleDelete() {
     "use server";
-    const result = await deleteQuotation(id);
-    if (!result?.error) redirect("/quotations");
-    return result;
+    return deleteQuotation(id);
   }
 
   return (
@@ -73,6 +69,8 @@ export default async function QuotationViewPage({ params }: { params: Promise<{ 
               description="This will create a new quotation with a new number, today's date, and the same items."
               confirmLabel="Duplicate"
               destructive={false}
+              successMessage="Quotation duplicated."
+              successHref={(result) => `/quotations/${result?.id}`}
               onConfirm={handleDuplicate}
             />
             <ConfirmDialog
@@ -83,6 +81,8 @@ export default async function QuotationViewPage({ params }: { params: Promise<{ 
               }
               title="Delete quotation?"
               description={`This will permanently delete "${quotation.quotationNumber}". This cannot be undone.`}
+              successMessage="Quotation deleted."
+              successHref="/quotations"
               onConfirm={handleDelete}
             />
           </>

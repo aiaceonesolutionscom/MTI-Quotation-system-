@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -35,6 +36,7 @@ export function BulkAddDialog({
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState("");
   const [pending, setPending] = useState(false);
+  const router = useRouter();
 
   const names = parseNames(value);
 
@@ -50,6 +52,7 @@ export function BulkAddDialog({
     toast.success(`${result.count ?? names.length} ${entityLabel.toLowerCase()}(s) added.`);
     setValue("");
     setOpen(false);
+    router.refresh();
   };
 
   return (

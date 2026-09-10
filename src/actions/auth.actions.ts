@@ -3,6 +3,7 @@
 import { AuthError } from "next-auth";
 import { signIn, signOut } from "@/lib/auth";
 import { loginSchema } from "@/lib/validations/auth.schema";
+import { logError } from "@/lib/server-log";
 
 export interface LoginActionState {
   error?: string;
@@ -27,6 +28,7 @@ export async function loginAction(_prevState: LoginActionState, formData: FormDa
     });
     return {};
   } catch (error) {
+    logError("loginAction", error);
     if (error instanceof AuthError) {
       return { error: "Invalid email or password." };
     }

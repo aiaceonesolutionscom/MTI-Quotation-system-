@@ -1,6 +1,7 @@
 "use client";
 
 import { useTransition } from "react";
+import { useRouter } from "next/navigation";
 import { Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { Switch } from "@/components/ui/switch";
@@ -26,6 +27,7 @@ export function CategoryLookupRowActions({
   onDelete: (id: string) => Promise<{ error?: string }>;
 }) {
   const [pending, startTransition] = useTransition();
+  const router = useRouter();
 
   return (
     <div className="flex items-center justify-end gap-2">
@@ -36,6 +38,10 @@ export function CategoryLookupRowActions({
           startTransition(async () => {
             const result = await onToggleStatus(item.id, checked);
             if (result?.error) toast.error(result.error);
+            else {
+              toast.success(`${entityLabel} marked ${checked ? "active" : "inactive"}.`);
+              router.refresh();
+            }
           })
         }
       />
@@ -54,6 +60,7 @@ export function CategoryLookupRowActions({
         }
         title={`Delete ${entityLabel.toLowerCase()}?`}
         description={`This will permanently delete "${item.name}". This cannot be undone.`}
+        successMessage={`${entityLabel} deleted.`}
         onConfirm={() => onDelete(item.id)}
       />
     </div>

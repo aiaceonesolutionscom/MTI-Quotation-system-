@@ -1,7 +1,6 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { requireSession } from "@/lib/auth-guard";
 import { quotationSchema, quotationStatusSchema, type QuotationOutput } from "@/lib/validations/quotation.schema";
@@ -12,6 +11,7 @@ import { calculateExpirationDate, isEditable } from "@/lib/quotation-expiry";
 import { allocateQuotationNumber } from "@/lib/quotation-number";
 import { numberToWords } from "@/lib/number-to-words";
 import type { Prisma } from "@/generated/prisma/client";
+import { logError } from "@/lib/server-log";
 
 type ActionResult = { error?: string };
 type Tx = Prisma.TransactionClient;
@@ -138,7 +138,7 @@ async function resolveQuotationItems(tx: Tx, items: QuotationOutput["items"]) {
   return { items: resolved };
 }
 
-export async function createQuotation(input: unknown): Promise<ActionResult> {
+export async function createQuotation(input: unknown): Promise<ActionResult & { id?: string }> {
   const session = await requireSession();
   const parsed = quotationSchema.safeParse(input);
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input." };
@@ -203,11 +203,12 @@ newId = await prisma.$transaction(
       { maxWait: 20_000, timeout: 30_000 }
     );
   } catch (err) {
+    logError("createQuotation", err);
     return { error: err instanceof Error ? err.message : "Unable to create quotation. Please try again." };
   }
 
   revalidatePath("/quotations");
-  redirect(`/quotations/${newId}`);
+  return { id: newId };
 }
 
 export async function updateQuotation(id: string, input: unknown): Promise<ActionResult> {
@@ -275,12 +276,13 @@ export async function updateQuotation(id: string, input: unknown): Promise<Actio
       { maxWait: 20_000, timeout: 30_000 }
     );
   } catch (err) {
+    logError("updateQuotation", err);
     return { error: err instanceof Error ? err.message : "Unable to update quotation. Please try again." };
   }
 
   revalidatePath("/quotations");
   revalidatePath(`/quotations/${id}`);
-  redirect(`/quotations/${id}`);
+  return {};
 }
 
 export async function duplicateQuotation(id: string): Promise<ActionResult & { id?: string }> {

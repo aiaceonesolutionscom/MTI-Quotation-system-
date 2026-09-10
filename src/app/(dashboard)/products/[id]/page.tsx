@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import { Pencil, Trash2, DollarSign } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -31,9 +31,7 @@ export default async function ProductViewPage({ params }: { params: Promise<{ id
 
   async function handleDelete() {
     "use server";
-    const result = await deleteProduct(id);
-    if (!result?.error) redirect("/products");
-    return result;
+    return deleteProduct(id);
   }
 
   const fields: [string, string][] = [
@@ -62,6 +60,8 @@ export default async function ProductViewPage({ params }: { params: Promise<{ id
               }
               title="Delete product?"
               description={`This will permanently delete "${product.name}" and all its rates. This cannot be undone.`}
+              successMessage="Product deleted."
+              successHref="/products"
               onConfirm={handleDelete}
             />
           </>

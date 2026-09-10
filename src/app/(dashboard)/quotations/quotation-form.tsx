@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
@@ -30,7 +31,7 @@ interface Option {
   name: string;
 }
 
-interface ProductOption extends Option {}
+type ProductOption = Option;
 
 const NONE_DISCOUNT = "NONE";
 
@@ -63,6 +64,7 @@ export function QuotationForm({
 }) {
   const isEdit = !!quotationId;
   const [serverError, setServerError] = useState<string | null>(null);
+  const router = useRouter();
 
   const { control, register, handleSubmit, watch, setValue, formState: { isSubmitting, errors } } = useForm<
     QuotationInput,
@@ -117,11 +119,25 @@ export function QuotationForm({
 
   const onSubmit = async (data: QuotationOutput) => {
     setServerError(null);
-    const result = isEdit ? await updateQuotation(quotationId, data) : await createQuotation(data);
+    if (isEdit) {
+      const result = await updateQuotation(quotationId, data);
+      if (result?.error) {
+        setServerError(result.error);
+        toast.error(result.error);
+        return;
+      }
+      toast.success("Quotation updated.");
+      router.push(`/quotations/${quotationId}`);
+      return;
+    }
+    const result = await createQuotation(data);
     if (result?.error) {
       setServerError(result.error);
       toast.error(result.error);
+      return;
     }
+    toast.success("Quotation saved.");
+    router.push(`/quotations/${result.id}`);
   };
 
   const customerOptions = customers.map((c) => ({ value: c.id, label: c.name }));

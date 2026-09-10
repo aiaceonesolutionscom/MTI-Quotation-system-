@@ -1,9 +1,9 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { productSchema, type ProductOutput } from "@/lib/validations/product.schema";
+import { logError } from "@/lib/server-log";
 
 type ActionResult = { error?: string };
 
@@ -27,7 +27,7 @@ function dedupeRates(rates: ProductOutput["rates"]): ActionResult & { rates?: Pr
   return { rates };
 }
 
-export async function createProduct(input: unknown): Promise<ActionResult> {
+export async function createProduct(input: unknown): Promise<ActionResult & { id?: string }> {
   const parsed = productSchema.safeParse(input);
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input." };
   const data = parsed.data;
@@ -56,12 +56,13 @@ export async function createProduct(input: unknown): Promise<ActionResult> {
       },
       { maxWait: 20_000, timeout: 30_000 }
     );
-  } catch {
+  } catch (error) {
+    logError("createProduct", error);
     return { error: "Unable to create product. Please try again." };
   }
 
   revalidatePath("/products");
-  redirect(`/products/${id}`);
+  return { id };
 }
 
 export async function updateProduct(id: string, input: unknown): Promise<ActionResult> {
@@ -92,13 +93,14 @@ export async function updateProduct(id: string, input: unknown): Promise<ActionR
       },
       { maxWait: 20_000, timeout: 30_000 }
     );
-  } catch {
+  } catch (error) {
+    logError("updateProduct", error);
     return { error: "Unable to update product. Please try again." };
   }
 
   revalidatePath("/products");
   revalidatePath(`/products/${id}`);
-  redirect(`/products/${id}`);
+  return {};
 }
 
 export async function toggleProductStatus(id: string, status: boolean): Promise<ActionResult> {

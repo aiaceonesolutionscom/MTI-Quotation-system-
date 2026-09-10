@@ -1,7 +1,6 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { customerSchema } from "@/lib/validations/customer.schema";
 
@@ -26,12 +25,6 @@ export async function createCustomer(input: unknown): Promise<ActionResult & { i
   return { id: customer.id };
 }
 
-export async function createCustomerAndRedirect(input: unknown): Promise<ActionResult> {
-  const result = await createCustomer(input);
-  if (result.error) return result;
-  redirect(`/customers/${result.id}`);
-}
-
 export async function updateCustomer(id: string, input: unknown): Promise<ActionResult> {
   const parsed = customerSchema.safeParse(input);
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input." };
@@ -39,7 +32,7 @@ export async function updateCustomer(id: string, input: unknown): Promise<Action
   await prisma.customer.update({ where: { id }, data: toData(parsed.data) });
   revalidatePath("/customers");
   revalidatePath(`/customers/${id}`);
-  redirect(`/customers/${id}`);
+  return {};
 }
 
 export async function toggleCustomerStatus(id: string, status: boolean): Promise<ActionResult> {

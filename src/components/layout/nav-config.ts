@@ -4,7 +4,6 @@ import {
   Package,
   Tags,
   Ruler,
-  Boxes,
   Users,
   FileText,
   Settings,
@@ -22,18 +21,17 @@ export interface NavItem {
 
 export const NAV_ITEMS: NavItem[] = [
   { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-  { label: "Products", href: "/products", icon: Package },
-  { label: "Customers", href: "/customers", icon: Users },
-  { label: "Quotations", href: "/quotations", icon: FileText },
   {
-    label: "Masters",
-    href: "/masters/categories",
-    icon: Boxes,
+    label: "Products",
+    href: "/products",
+    icon: Package,
     children: [
       { label: "Categories, Sizes & Ranges", href: "/masters/categories", icon: Tags },
       { label: "UOM / UOC", href: "/masters/uom", icon: Ruler },
     ],
   },
+  { label: "Customers", href: "/customers", icon: Users },
+  { label: "Quotations", href: "/quotations", icon: FileText },
   {
     label: "Settings",
     href: "/settings/company",

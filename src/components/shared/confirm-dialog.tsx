@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition, type ReactNode } from "react";
+import { useRouter } from "next/navigation";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -20,6 +21,8 @@ export function ConfirmDialog({
   description,
   confirmLabel = "Confirm",
   destructive = true,
+  successMessage,
+  successHref,
   onConfirm,
 }: {
   trigger: ReactNode;
@@ -27,8 +30,11 @@ export function ConfirmDialog({
   description: string;
   confirmLabel?: string;
   destructive?: boolean;
-  onConfirm: () => Promise<{ error?: string } | void>;
+  successMessage?: string;
+  successHref?: string | ((result: { error?: string; id?: string } | void) => string);
+  onConfirm: () => Promise<{ error?: string; id?: string } | void>;
 }) {
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const [pending, startTransition] = useTransition();
 
@@ -40,6 +46,12 @@ export function ConfirmDialog({
         return;
       }
       setOpen(false);
+      if (successMessage) toast.success(successMessage);
+      if (successHref) {
+        const href = typeof successHref === "function" ? successHref(result) : successHref;
+        router.push(href);
+      }
+      router.refresh();
     });
   };
 

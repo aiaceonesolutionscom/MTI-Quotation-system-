@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
@@ -40,6 +41,7 @@ export function ProductForm({
 }) {
   const isEdit = !!product;
   const [serverError, setServerError] = useState<string | null>(null);
+  const router = useRouter();
   const [sizes, setSizes] = useState<Option[]>([]);
   const [rangeTypes, setRangeTypes] = useState<Option[]>([]);
   const [loadingLookups, startLoadingLookups] = useTransition();
@@ -87,11 +89,25 @@ export function ProductForm({
 
   const onSubmit = async (data: ProductOutput) => {
     setServerError(null);
-    const result = isEdit ? await updateProduct(product.id, data) : await createProduct(data);
+    if (isEdit) {
+      const result = await updateProduct(product.id, data);
+      if (result?.error) {
+        setServerError(result.error);
+        toast.error(result.error);
+        return;
+      }
+      toast.success("Product updated.");
+      router.push(`/products/${product.id}`);
+      return;
+    }
+    const result = await createProduct(data);
     if (result?.error) {
       setServerError(result.error);
       toast.error(result.error);
+      return;
     }
+    toast.success("Product created.");
+    router.push(`/products/${result.id}`);
   };
 
   const categoryOptions = categories.map((c) => ({ value: c.id, label: c.name }));

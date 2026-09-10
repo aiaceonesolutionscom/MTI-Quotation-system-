@@ -1,6 +1,7 @@
 ﻿"use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
@@ -10,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { customerSchema, type CustomerInput } from "@/lib/validations/customer.schema";
-import { createCustomerAndRedirect, updateCustomer } from "@/actions/customers.actions";
+import { createCustomer, updateCustomer } from "@/actions/customers.actions";
 
 export function CustomerForm({
   customer,
@@ -23,8 +24,9 @@ export function CustomerForm({
     status: boolean;
   };
 }) {
-  const isEdit = !!customer;
+const isEdit = !!customer;
   const [serverError, setServerError] = useState<string | null>(null);
+  const router = useRouter();
 
   const {
     register,
@@ -42,13 +44,27 @@ export function CustomerForm({
     },
   });
 
-  const onSubmit = async (data: CustomerInput) => {
+const onSubmit = async (data: CustomerInput) => {
     setServerError(null);
-    const result = isEdit ? await updateCustomer(customer.id, data) : await createCustomerAndRedirect(data);
+    if (isEdit) {
+      const result = await updateCustomer(customer.id, data);
+      if (result?.error) {
+        setServerError(result.error);
+        toast.error(result.error);
+        return;
+      }
+      toast.success("Customer updated.");
+      router.push(`/customers/${customer.id}`);
+      return;
+    }
+    const result = await createCustomer(data);
     if (result?.error) {
       setServerError(result.error);
       toast.error(result.error);
+      return;
     }
+    toast.success("Customer created.");
+    router.push(`/customers/${result.id}`);
   };
 
   return (

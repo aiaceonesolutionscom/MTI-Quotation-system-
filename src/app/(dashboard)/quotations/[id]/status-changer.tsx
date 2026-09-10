@@ -1,6 +1,7 @@
 "use client";
 
 import { useTransition } from "react";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { setQuotationStatus } from "@/actions/quotations.actions";
@@ -18,6 +19,7 @@ const LABELS: Record<QuotationStatus, string> = {
 
 export function StatusChanger({ id, status }: { id: string; status: QuotationStatus }) {
   const [pending, startTransition] = useTransition();
+  const router = useRouter();
 
   return (
     <Select
@@ -27,7 +29,10 @@ export function StatusChanger({ id, status }: { id: string; status: QuotationSta
         startTransition(async () => {
           const result = await setQuotationStatus(id, { status: value });
           if (result?.error) toast.error(result.error);
-          else toast.success("Status updated.");
+          else {
+            toast.success("Status updated.");
+            router.refresh();
+          }
         })
       }
     >

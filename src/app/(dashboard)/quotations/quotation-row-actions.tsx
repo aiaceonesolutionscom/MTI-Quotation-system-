@@ -67,6 +67,7 @@ export function QuotationRowActions({
         }
         title="Delete quotation?"
         description={`This will permanently delete quotation "${quotation.quotationNumber}". This cannot be undone.`}
+        successMessage="Quotation deleted."
         onConfirm={() => deleteQuotation(quotation.id)}
       />
     </div>

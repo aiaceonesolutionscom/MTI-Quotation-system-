@@ -35,18 +35,26 @@ function NavGroup({ item, pathname }: { item: NavItem; pathname: string }) {
 
   return (
     <div>
-      <button
-        type="button"
-        onClick={() => setOpen((o) => !o)}
-        className={cn(
-          "flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors",
-          active ? "text-foreground" : "text-muted-foreground hover:bg-muted hover:text-foreground"
-        )}
-      >
-        <item.icon className="size-4 shrink-0" />
-        <span className="flex-1 text-left">{item.label}</span>
-        <ChevronDown className={cn("size-4 transition-transform", open && "rotate-180")} />
-      </button>
+      <div className="flex items-center">
+        <Link
+          href={item.href}
+          className={cn(
+            "flex flex-1 items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors",
+            active ? "text-foreground" : "text-muted-foreground hover:bg-muted hover:text-foreground"
+          )}
+        >
+          <item.icon className="size-4 shrink-0" />
+          {item.label}
+        </Link>
+        <button
+          type="button"
+          onClick={() => setOpen((o) => !o)}
+          className="ml-auto rounded-md p-1 text-muted-foreground hover:text-foreground transition-colors"
+          aria-label={`Toggle ${item.label} submenu`}
+        >
+          <ChevronDown className={cn("size-4 transition-transform", open && "rotate-180")} />
+        </button>
+      </div>
       {open && (
         <div className="ml-4 mt-1 flex flex-col gap-1 border-l pl-3">
           {item.children.map((child) => (

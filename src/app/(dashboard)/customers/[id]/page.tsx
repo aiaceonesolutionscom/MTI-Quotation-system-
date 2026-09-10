@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import { Pencil, Trash2, FilePlus, FileText } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -28,9 +28,7 @@ export default async function CustomerViewPage({ params }: { params: Promise<{ i
 
   async function handleDelete() {
     "use server";
-    const result = await deleteCustomer(id);
-    if (!result?.error) redirect("/customers");
-    return result;
+    return deleteCustomer(id);
   }
 
   const fields: [string, string][] = [
@@ -60,6 +58,8 @@ export default async function CustomerViewPage({ params }: { params: Promise<{ i
               }
               title="Delete customer?"
               description={`This will permanently delete "${customer.companyName}". This cannot be undone.`}
+              successMessage="Customer deleted."
+              successHref="/customers"
               onConfirm={handleDelete}
             />
           </>
