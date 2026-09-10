@@ -1,14 +1,13 @@
 "use client";
 
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
-import { useRef, useTransition } from "react";
+import { useRef, useState, useTransition } from "react";
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Combobox } from "@/components/shared/combobox";
 import { DateInput } from "@/components/shared/date-input";
-import { cn } from "@/lib/utils";
 
 interface Option {
   id: string;
@@ -38,6 +37,7 @@ export function QuotationFilters({ customers }: { customers: Option[] }) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const [initial] = useState(() => new URLSearchParams(searchParams.toString()));
   const [, startTransition] = useTransition();
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -77,7 +77,7 @@ export function QuotationFilters({ customers }: { customers: Option[] }) {
           <Search className="absolute left-2.5 top-2.5 size-4 text-muted-foreground" />
           <Input
             placeholder="Quotation #…"
-            defaultValue={searchParams.get("q") ?? ""}
+            defaultValue={initial.get("q") ?? ""}
             className="pl-8"
             onChange={(e) => updateDebounced("q", e.target.value)}
           />
@@ -90,7 +90,7 @@ export function QuotationFilters({ customers }: { customers: Option[] }) {
           searchPlaceholder="Search customers…"
         />
         <Select
-          defaultValue={searchParams.get("status") ?? "all"}
+          defaultValue={initial.get("status") ?? "all"}
           onValueChange={(v) => update("status", v === "all" || !v ? "" : v)}
         >
           <SelectTrigger className="w-full">
