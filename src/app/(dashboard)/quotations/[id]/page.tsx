@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Pencil, FileDown, Printer, Copy, Trash2 } from "lucide-react";
+import { Pencil, FileDown, Printer, Trash2 } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -10,8 +10,9 @@ import { ConfirmDialog } from "@/components/shared/confirm-dialog";
 import { formatDate } from "@/lib/format";
 import { formatMoney } from "@/lib/money";
 import { getEffectiveStatus, isEditable } from "@/lib/quotation-expiry";
-import { deleteQuotation, duplicateQuotation } from "@/actions/quotations.actions";
+import { deleteQuotation } from "@/actions/quotations.actions";
 import { StatusChanger } from "./status-changer";
+import { DuplicateQuotationButton } from "./duplicate-quotation-button";
 import { QuotationStatusBadge } from "@/components/shared/quotation-status-badge";
 
 export default async function QuotationViewPage({ params }: { params: Promise<{ id: string }> }) {
@@ -29,11 +30,6 @@ export default async function QuotationViewPage({ params }: { params: Promise<{ 
 
   const effectiveStatus = getEffectiveStatus(quotation);
   const editable = isEditable(quotation);
-
-  async function handleDuplicate() {
-    "use server";
-    return duplicateQuotation(id);
-  }
 
   async function handleDelete() {
     "use server";
@@ -59,20 +55,7 @@ export default async function QuotationViewPage({ params }: { params: Promise<{ 
             <Button variant="outline" render={<Link href={`/api/quotations/${id}/pdf`} target="_blank" />}>
               <Printer /> Print
             </Button>
-            <ConfirmDialog
-              trigger={
-                <Button variant="outline">
-                  <Copy /> Duplicate
-                </Button>
-              }
-              title="Duplicate quotation?"
-              description="This will create a new quotation with a new number, today's date, and the same items."
-              confirmLabel="Duplicate"
-              destructive={false}
-              successMessage="Quotation duplicated."
-              successHref={(result) => `/quotations/${result?.id}`}
-              onConfirm={handleDuplicate}
-            />
+            <DuplicateQuotationButton quotationId={id} quotationNumber={quotation.quotationNumber} />
             <ConfirmDialog
               trigger={
                 <Button variant="outline" className="text-destructive">
