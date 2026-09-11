@@ -7,10 +7,10 @@ import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/shared/page-header";
 import { EmptyState } from "@/components/shared/empty-state";
 import { ListPagination } from "@/components/shared/list-pagination";
-import { QuotationStatusBadge } from "@/components/shared/quotation-status-badge";
+import { LiveStatusBadge } from "@/components/shared/live-status-badge";
 import { formatDate } from "@/lib/format";
 import { formatMoney } from "@/lib/money";
-import { getEffectiveStatus, isEditable, EXPIRING_SOON_DAYS, addDays } from "@/lib/quotation-expiry";
+import { isEditable, EXPIRING_SOON_DAYS, addDays } from "@/lib/quotation-expiry";
 import { QuotationFilters } from "./quotation-filters";
 import { QuotationRowActions } from "./quotation-row-actions";
 import type { Prisma } from "@/generated/prisma/client";
@@ -138,7 +138,7 @@ export default async function QuotationsPage({
                       <TableCell>{formatDate(q.expirationDate)}</TableCell>
                       <TableCell className="text-right">{formatMoney(q.grandTotal.toString())}</TableCell>
                       <TableCell>
-                        <QuotationStatusBadge status={getEffectiveStatus(q)} />
+                        <LiveStatusBadge status={q.status} expirationDate={q.expirationDate.getTime()} />
                       </TableCell>
                       <TableCell className="text-muted-foreground">{q.createdBy.name}</TableCell>
                       <TableCell>

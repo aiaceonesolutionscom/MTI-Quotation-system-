@@ -7,13 +7,13 @@ import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { PageHeader } from "@/components/shared/page-header";
 import { ConfirmDialog } from "@/components/shared/confirm-dialog";
+import { LiveStatusBadge } from "@/components/shared/live-status-badge";
 import { formatDate } from "@/lib/format";
 import { formatMoney } from "@/lib/money";
-import { getEffectiveStatus, isEditable } from "@/lib/quotation-expiry";
+import { isEditable } from "@/lib/quotation-expiry";
 import { deleteQuotation } from "@/actions/quotations.actions";
 import { StatusChanger } from "./status-changer";
 import { DuplicateQuotationButton } from "./duplicate-quotation-button";
-import { QuotationStatusBadge } from "@/components/shared/quotation-status-badge";
 import { BackLink } from "@/components/shared/back-link";
 
 export default async function QuotationViewPage({ params }: { params: Promise<{ id: string }> }) {
@@ -29,7 +29,6 @@ export default async function QuotationViewPage({ params }: { params: Promise<{ 
   });
   if (!quotation) notFound();
 
-  const effectiveStatus = getEffectiveStatus(quotation);
   const editable = isEditable(quotation);
 
   async function handleDelete() {
@@ -75,7 +74,7 @@ export default async function QuotationViewPage({ params }: { params: Promise<{ 
       />
 
       <div className="flex items-center gap-3">
-        <QuotationStatusBadge status={effectiveStatus} />
+        <LiveStatusBadge status={quotation.status} expirationDate={quotation.expirationDate.getTime()} />
         <span className="text-sm text-muted-foreground">
           {formatDate(quotation.quotationDate)} — Expires {formatDate(quotation.expirationDate)}
         </span>

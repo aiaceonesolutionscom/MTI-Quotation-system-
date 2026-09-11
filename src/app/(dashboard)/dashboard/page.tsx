@@ -1,13 +1,13 @@
 import Link from "next/link";
-import { FilePlus, Package, Users, FileText, FileClock, CheckCircle2, Clock3, DollarSign, History } from "lucide-react";
+import { FilePlus, Package, Users, History } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { QuotationStatusBadge } from "@/components/shared/quotation-status-badge";
+import { LiveStatusBadge } from "@/components/shared/live-status-badge";
 import { formatDate } from "@/lib/format";
 import { formatMoney } from "@/lib/money";
-import { getEffectiveStatus } from "@/lib/quotation-expiry";
+import { DashboardStats } from "./dashboard-stats";
 
 const RECENT_COUNT = 7;
 
@@ -24,27 +24,7 @@ export default async function DashboardPage() {
     }),
   ]);
 
-  let draftCount = 0;
-  let activeCount = 0;
-  let expiredCount = 0;
-  let totalValue = 0;
-
-  for (const q of allQuotations) {
-    const effective = getEffectiveStatus(q);
-    if (q.status === "DRAFT") draftCount++;
-    if (effective === "EXPIRED") expiredCount++;
-    else if (effective !== "ACCEPTED" && effective !== "REJECTED") activeCount++;
-    totalValue += Number(q.grandTotal);
-  }
-
-  const cards = [
-    { label: "Total Products", value: totalProducts, icon: Package },
-    { label: "Total Customers", value: totalCustomers, icon: Users },
-    { label: "Total Quotations", value: totalQuotations, icon: FileText },
-    { label: "Draft Quotations", value: draftCount, icon: FileClock },
-    { label: "Active Quotations", value: activeCount, icon: Clock3 },
-    { label: "Expired Quotations", value: expiredCount, icon: CheckCircle2 },
-  ];
+  const totalValue = allQuotations.reduce((sum, q) => sum + Number(q.grandTotal), 0);
 
   return (
     <div className="space-y-6">
@@ -54,30 +34,16 @@ export default async function DashboardPage() {
       </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
-        {cards.map((c) => (
-          <Card key={c.label}>
-            <CardContent className="flex items-center gap-3 pt-6">
-              <div className="rounded-lg bg-primary/10 p-2 text-primary">
-                <c.icon className="size-5" />
-              </div>
-              <div>
-                <p className="text-2xl font-bold leading-tight">{c.value}</p>
-                <p className="text-xs text-muted-foreground">{c.label}</p>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-        <Card className="sm:col-span-2 lg:col-span-3 xl:col-span-6">
-          <CardContent className="flex items-center gap-3 pt-6">
-            <div className="rounded-lg bg-primary/10 p-2 text-primary">
-              <DollarSign className="size-5" />
-            </div>
-            <div>
-              <p className="text-2xl font-bold leading-tight">{formatMoney(totalValue)}</p>
-              <p className="text-xs text-muted-foreground">Total Quotation Value</p>
-            </div>
-          </CardContent>
-        </Card>
+        <DashboardStats
+          totalProducts={totalProducts}
+          totalCustomers={totalCustomers}
+          totalQuotations={totalQuotations}
+          quotations={allQuotations.map((q) => ({
+            status: q.status,
+            expirationDate: q.expirationDate.getTime(),
+          }))}
+          totalValue={totalValue}
+        />
       </div>
 
       <div className="flex flex-wrap gap-3">
@@ -127,7 +93,7 @@ export default async function DashboardPage() {
                     <TableCell>{formatDate(q.expirationDate)}</TableCell>
                     <TableCell className="text-right">{formatMoney(q.grandTotal.toString())}</TableCell>
                     <TableCell>
-                      <QuotationStatusBadge status={getEffectiveStatus(q)} />
+                      <LiveStatusBadge status={q.status} expirationDate={q.expirationDate.getTime()} />
                     </TableCell>
                   </TableRow>
                 ))}

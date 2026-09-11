@@ -16,8 +16,11 @@ export function calculateExpirationDate(quotationDate: Date): Date {
 const TERMINAL_STATUSES: QuotationStatus[] = ["ACCEPTED", "REJECTED"];
 
 /** A quotation's real-world status, factoring in expiry without needing a background job. */
-export function getEffectiveStatus(quotation: { status: QuotationStatus; expirationDate: Date }): QuotationStatus {
-  if (!TERMINAL_STATUSES.includes(quotation.status) && quotation.expirationDate < new Date()) {
+export function getEffectiveStatus(
+  quotation: { status: QuotationStatus; expirationDate: Date },
+  now: Date = new Date(),
+): QuotationStatus {
+  if (!TERMINAL_STATUSES.includes(quotation.status) && quotation.expirationDate < now) {
     return "EXPIRED";
   }
   return quotation.status;
