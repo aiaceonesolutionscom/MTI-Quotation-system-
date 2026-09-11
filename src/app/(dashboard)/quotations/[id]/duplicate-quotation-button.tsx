@@ -24,7 +24,7 @@ export function DuplicateQuotationButton({
       confirmLabel="Duplicate"
       destructive={false}
       successMessage="Quotation duplicated."
-      successHref={(result) => `/quotations/${result?.id}`}
+      successHref={(result) => `/quotations/${result?.id}/edit`}
       onConfirm={() => duplicateQuotation(quotationId)}
     />
   );

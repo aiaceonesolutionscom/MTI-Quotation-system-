@@ -53,7 +53,7 @@ export function QuotationRowActions({
               return;
             }
             toast.success("Quotation duplicated.");
-            router.push(`/quotations/${result.id}`);
+            router.push(`/quotations/${result.id}/edit`);
           })
         }
       >
