@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Pencil, Trash2, FilePlus, FileText } from "lucide-react";
+import { Pencil, Trash2, FilePlus, FileText, Eye } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -102,6 +102,7 @@ export default async function CustomerViewPage({ params }: { params: Promise<{ i
                   <TableHead>Date</TableHead>
                   <TableHead className="text-right">Total</TableHead>
                   <TableHead>Status</TableHead>
+                  <TableHead className="text-right w-12"></TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -116,6 +117,11 @@ export default async function CustomerViewPage({ params }: { params: Promise<{ i
                     <TableCell className="text-right">{formatMoney(q.grandTotal.toString())}</TableCell>
                     <TableCell>
                       <QuotationStatusBadge status={q.status} />
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <Button variant="ghost" size="icon-sm" render={<Link href={`/quotations/${q.id}`} />}>
+                        <Eye className="size-4" />
+                      </Button>
                     </TableCell>
                   </TableRow>
                 ))}
