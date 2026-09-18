@@ -148,6 +148,8 @@ model Customer {
   companyName String
   city        String?
   country     String?
+  phone       String?
+  email       String?
   status      Boolean  @default(true)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt

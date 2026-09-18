@@ -12,6 +12,8 @@ function toData(parsed: ReturnType<typeof customerSchema.safeParse>["data"]) {
     companyName: parsed.companyName,
     city: parsed.city || null,
     country: parsed.country || null,
+    phone: parsed.phone || null,
+    email: parsed.email || null,
     status: parsed.status,
   };
 }

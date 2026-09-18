@@ -35,6 +35,8 @@ export default async function CustomerViewPage({ params }: { params: Promise<{ i
   const fields: [string, string][] = [
     ["Country", customer.country ?? "\u2014"],
     ["City", customer.city ?? "\u2014"],
+    ["Phone Number", customer.phone ?? "\u2014"],
+    ["Email", customer.email ?? "\u2014"],
     ["Status", customer.status ? "Active" : "Inactive"],
     ["Created", formatDate(customer.createdAt)],
   ];

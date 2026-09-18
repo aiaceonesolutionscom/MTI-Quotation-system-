@@ -5,7 +5,9 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "build:cpanel": "next build --webpack",
     "prebuild": "prisma generate",
+    "postbuild": "node -e \"require('fs').cpSync('.next/static', '.next/standalone/.next/static', {recursive:true})\"",
     "start": "next start",
     "lint": "eslint",
     "db:generate": "prisma generate",

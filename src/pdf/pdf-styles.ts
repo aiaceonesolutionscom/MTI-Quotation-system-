@@ -128,6 +128,14 @@ export const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: COLORS.border,
   },
+  summaryRowPlain: {
+    flexDirection: "row",
+  },
+  summaryCellBlank: {
+    fontSize: 10,
+    paddingVertical: 6,
+    paddingHorizontal: 4,
+  },
   cellHeader: {
     color: COLORS.white,
     fontFamily: "Times-BoldItalic",
@@ -158,6 +166,23 @@ export const styles = StyleSheet.create({
     textAlign: "center",
   },
   summaryCellBold: {
+    color: COLORS.white,
+    fontFamily: "Times-Bold",
+    fontSize: 12.5,
+    paddingVertical: 7,
+    paddingHorizontal: 4,
+    textAlign: "center",
+  },
+  summaryCellBoxed: {
+    backgroundColor: COLORS.black,
+    color: COLORS.white,
+    fontSize: 10,
+    paddingVertical: 6,
+    paddingHorizontal: 4,
+    textAlign: "center",
+  },
+  summaryCellBoxedBold: {
+    backgroundColor: COLORS.black,
     color: COLORS.white,
     fontFamily: "Times-Bold",
     fontSize: 12.5,

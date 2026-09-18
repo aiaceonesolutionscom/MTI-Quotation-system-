@@ -21,6 +21,8 @@ export function CustomerForm({
     companyName: string;
     city: string | null;
     country: string | null;
+    phone: string | null;
+    email: string | null;
     status: boolean;
   };
 }) {
@@ -40,6 +42,8 @@ const isEdit = !!customer;
       companyName: customer?.companyName ?? "",
       city: customer?.city ?? "",
       country: customer?.country ?? "",
+      phone: customer?.phone ?? "",
+      email: customer?.email ?? "",
       status: customer?.status ?? true,
     },
   });
@@ -86,6 +90,17 @@ const onSubmit = async (data: CustomerInput) => {
             <div className="space-y-2">
               <Label htmlFor="country">Country</Label>
               <Input id="country" {...register("country")} />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="phone">Phone Number</Label>
+              <Input id="phone" {...register("phone")} />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="email">Email</Label>
+              <Input id="email" type="email" {...register("email")} />
+              {errors.email && <p className="text-sm text-destructive">{errors.email.message}</p>}
             </div>
 
             <div className="flex items-center gap-2 sm:col-span-2">
