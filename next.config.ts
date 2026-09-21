@@ -13,6 +13,7 @@ const nextConfig: NextConfig = {
     "/api/quotations/[id]/pdf": [
       "./node_modules/yoga-layout/dist/binaries/**/*",
       "./node_modules/pdfkit/js/data/**/*",
+      "./node_modules/pdfkit/js/standard-fonts/**/*",
       "./node_modules/@react-pdf/**/*",
     ],
   },
