@@ -22,7 +22,7 @@ export function LoginForm() {
           src="/logo.png"
           alt="MTI"
           className="mb-2 size-12"
-          style={{ transform: "translateX(28px)" }}
+          style={{ transform: "translateX(64px)" }}
         />
         <CardTitle className="text-xl">Master Tech International</CardTitle>
         <CardDescription>Sign in to the quotation management system</CardDescription>
