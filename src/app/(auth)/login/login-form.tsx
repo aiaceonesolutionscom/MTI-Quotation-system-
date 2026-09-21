@@ -18,7 +18,7 @@ export function LoginForm() {
   return (
     <Card className="w-full max-w-sm">
       <CardHeader className="items-center justify-center text-center">
-        <img src="/logo.png" alt="MTI" className="mb-2 size-12" />
+        <img src="/logo.png" alt="MTI" className="mb-2 size-12 translate-x-1" />
         <CardTitle className="text-xl">Master Tech International</CardTitle>
         <CardDescription>Sign in to the quotation management system</CardDescription>
       </CardHeader>
