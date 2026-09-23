@@ -42,11 +42,11 @@ export function QuotationTotals({ totals }: { totals: PdfTotals }) {
     <View>
       <View style={styles.summaryRow}>
         <Text style={[styles.summaryCell, styles.colSNo]} />
-        <Text style={[styles.summaryCellBold, styles.colDescription]}>TOTAL</Text>
+        <Text style={[styles.summaryCell, styles.colDescription]}>TOTAL</Text>
         <Text style={[styles.summaryCell, styles.colUom]} />
         <Text style={[styles.summaryCell, styles.colQty]}>{formatAmount(totals.totalQuantity)}</Text>
-        <Text style={[styles.summaryCellBold, styles.colRate]}>TOTAL</Text>
-        <Text style={[styles.summaryCellBold, styles.colTotal]}>{formatAmount(totals.subtotal)}</Text>
+        <Text style={[styles.summaryCell, styles.colRate]}>TOTAL</Text>
+        <Text style={[styles.summaryCell, styles.colTotal]}>{formatAmount(totals.subtotal)}</Text>
       </View>
 
       {extraRows.map((row) => (
@@ -55,8 +55,8 @@ export function QuotationTotals({ totals }: { totals: PdfTotals }) {
           <Text style={[styles.summaryCellBlank, styles.colDescription]} />
           <Text style={[styles.summaryCellBlank, styles.colUom]} />
           <Text style={[styles.summaryCellBlank, styles.colQty]} />
-          <Text style={[styles.summaryCellBoxed, styles.colRate]}>{row.label}</Text>
-          <Text style={[styles.summaryCellBoxed, styles.colTotal]}>{row.value}</Text>
+          <Text style={[styles.summaryCellBoxedRate, styles.colRate]}>{row.label}</Text>
+          <Text style={[styles.summaryCellBoxedTotal, styles.colTotal]}>{row.value}</Text>
         </View>
       ))}
 
@@ -65,8 +65,8 @@ export function QuotationTotals({ totals }: { totals: PdfTotals }) {
         <Text style={[styles.summaryCellBlank, styles.colDescription]} />
         <Text style={[styles.summaryCellBlank, styles.colUom]} />
         <Text style={[styles.summaryCellBlank, styles.colQty]} />
-        <Text style={[styles.summaryCellBoxedBold, styles.colRate]}>TOTAL</Text>
-        <Text style={[styles.summaryCellBoxedBold, styles.colTotal]}>{formatAmount(totals.grandTotal)}</Text>
+        <Text style={[styles.summaryCellBoxedBoldRate, styles.colRate]}>TOTAL</Text>
+        <Text style={[styles.summaryCellBoxedBoldTotal, styles.colTotal]}>{formatAmount(totals.grandTotal)}</Text>
       </View>
 
       <View style={styles.amountWordsWrap}>
