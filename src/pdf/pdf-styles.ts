@@ -6,7 +6,8 @@ export const COLORS = {
   border: "#000000",
   muted: "#333333",
   lightGrey: "#f2f2f2",
-  darkGrey: "#555555",
+  darkGrey: "#939393",
+  grandTotal: "#3b3b3b",
 };
 
 export const styles = StyleSheet.create({
@@ -117,7 +118,7 @@ export const styles = StyleSheet.create({
   },
   tableHeaderRow: {
     flexDirection: "row",
-    backgroundColor: COLORS.black,
+    backgroundColor: COLORS.darkGrey,
   },
   tableRow: {
     flexDirection: "row",
@@ -188,7 +189,7 @@ export const styles = StyleSheet.create({
     textAlign: "center",
   },
   summaryCellBoxedBold: {
-    backgroundColor: COLORS.black,
+    backgroundColor: COLORS.grandTotal,
     color: COLORS.white,
     fontFamily: "Times-Bold",
     fontSize: 12.5,
@@ -220,7 +221,7 @@ export const styles = StyleSheet.create({
     borderColor: COLORS.border,
   },
   summaryCellBoxedBoldRate: {
-    backgroundColor: COLORS.black,
+    backgroundColor: COLORS.grandTotal,
     color: COLORS.white,
     fontFamily: "Times-Bold",
     fontSize: 12.5,
@@ -231,7 +232,7 @@ export const styles = StyleSheet.create({
     borderColor: COLORS.border,
   },
   summaryCellBoxedBoldTotal: {
-    backgroundColor: COLORS.black,
+    backgroundColor: COLORS.grandTotal,
     color: COLORS.white,
     fontFamily: "Times-Bold",
     fontSize: 12.5,
